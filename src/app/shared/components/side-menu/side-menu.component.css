@@ -1,0 +1,11 @@
+/* styles.css */
+.tamano-personalizado {
+    width: 220px;
+    height: 200px;
+  }
+
+.imagen-centrada {
+display: block;
+margin-left: auto;
+margin-right: auto;
+}

@@ -1,0 +1,67 @@
+<p>Autenticación de usuario</p>
+<div class="row">
+    <div class="col">
+        <form [formGroup]="myForm" (ngSubmit)="login()" autocomplete="off">
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Usuario</label>
+                <div class="col-sm-4">
+                    <input type="text"
+                           class="form-control"
+                           formControlName="userName"
+                           placeholder="Nombre de usuario">
+
+                    <span *ngIf="isValiedField('userName')" class="form-text text-danger">                        
+                        {{getFieldError('userName')}}
+                    </span>
+                    
+                </div>
+            </div>
+            <div class="mb-3 row">
+                <label class="col-sm-3 col-form-label">Password</label>
+                <div class="col-sm-4">
+                    <input type="password"
+                           class="form-control"
+                           formControlName="password"
+                           placeholder="Password">
+
+                    <span *ngIf="isValiedField('password')" class="form-text text-danger">                        
+                        {{getFieldError('password')}}
+                    </span>
+                    
+                </div>
+            </div>
+            <div class="mb-3 row">      
+                <div class="col">
+                    <button type="submit" class="btn btn-primary float-begin">Login</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!--
+    <div class="row">
+        <div class="col">
+    
+            <span>Valid</span>
+            <pre>{{ myForm.valid | json }}</pre>
+    
+            <span>Pristine</span>
+            <pre>{{ myForm.pristine | json }}</pre>
+    
+            <span>Touched</span>
+            <pre>{{ myForm.touched | json }}</pre>
+    
+            <span>Value</span>
+            <pre>{{ myForm.value | json }}</pre>
+    
+            <span>Precio</span>
+            <pre>{{ myForm.controls['userName'].value | json }}</pre>
+    
+            <span>Precio - Errors</span>
+            <pre>{{ myForm.controls['userName'].errors | json }}</pre>
+    
+                
+        </div>
+
+    </div>
+    -->
