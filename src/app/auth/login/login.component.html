@@ -30,6 +30,11 @@
                     
                 </div>
             </div>
+            <div *ngIf="error" class="mb-3 row">
+                <span class="form-text text-danger">                        
+                    {{error}}
+                </span>
+            </div>
             <div class="mb-3 row">      
                 <div class="col">
                     <button type="submit" class="btn btn-primary float-begin">Login</button>
