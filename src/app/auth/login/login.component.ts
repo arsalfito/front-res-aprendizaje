@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { LoginDTO, MenuDTO, MenuItem, ResponseDetailLoginDTO } from 'src/app/model/model-interface';
 import { AppSharedService } from 'src/app/services/app-shared-service';
-
-interface MenuItem{
-  title: string;
-  route: string;
-}
+import { UsuariosServiceService } from 'src/app/services/usuarios-service.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +12,8 @@ interface MenuItem{
 })
 export class LoginComponent implements OnInit {
 
-  public reactiveMenu: MenuItem[] = [];
+  public reactiveMenu: MenuDTO[] = [];
+  public error: string = "";
 
   public myForm: FormGroup = this.fb.group({
     userName: ['', [Validators.required], []],
@@ -24,36 +22,45 @@ export class LoginComponent implements OnInit {
 
   constructor(private fb: FormBuilder, 
     private router: Router,
-    private appSharedService: AppSharedService) { }
+    private appSharedService: AppSharedService,
+    private usuariosServiceService: UsuariosServiceService) { }
   
   ngOnInit(): void {
   }
 
   login(){
     //console.log('login');
+    this.error = "";
     if(this.myForm.invalid) {
       this.myForm.markAllAsTouched();
       return;
     }    
 
-    this.reactiveMenu = [
-      {title: 'Calificaciones', route: './aprendizaje/calificaciones'},
-      {title: 'Resultados', route: './aprendizaje/resultados'},
-      {title: 'Criterios de evaluación', route: './aprendizaje/criterios'},
-      {title: 'Cerrar sesión', route: './aprendizaje/salir'},
-    ];
+    let login: LoginDTO = {
+      userName: this.myForm.get('userName')?.value,
+      password: this.myForm.get('password')?.value
+    }
 
-    this.reactiveMenu.forEach(menuItem => {
-      this.appSharedService.actualizarInformacion(menuItem);
+    this.usuariosServiceService.login(login).subscribe({
+      next:(detalleLogin: ResponseDetailLoginDTO)=>{
+        if(detalleLogin!=null){
+          //console.log(detalleLogin);
+          this.reactiveMenu = detalleLogin.menu;          
+          this.reactiveMenu.forEach(menuItem => {
+            this.appSharedService.actualizarInformacion(menuItem);
+          });     
+          sessionStorage.setItem('logged', '1');
+          this.router.navigate(['./aprendizaje']);     
+        }  
+      },
+      error:(error: any)=>{
+        this.error = error.error.message;
+      }
     });
-    //this.appSharedService.actualizarInformacion(this.reactiveMenu[0]);
-
-    sessionStorage.setItem('logged', '1');
-    this.router.navigate(['./aprendizaje']);
   }
 
   logout(){
-    console.log('logout');
+    //console.log('logout');
     sessionStorage.setItem('logged', '0');
     this.router.navigate(['./login/login']);
   }
