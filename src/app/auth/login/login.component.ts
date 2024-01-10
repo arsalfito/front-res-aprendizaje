@@ -1,6 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AppSharedService } from 'src/app/services/app-shared-service';
+
+interface MenuItem{
+  title: string;
+  route: string;
+}
 
 @Component({
   selector: 'app-login',
@@ -9,13 +15,16 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
+  public reactiveMenu: MenuItem[] = [];
+
   public myForm: FormGroup = this.fb.group({
     userName: ['', [Validators.required], []],
     password: ['', [Validators.required], []]
   });
 
   constructor(private fb: FormBuilder, 
-    private router: Router) { }
+    private router: Router,
+    private appSharedService: AppSharedService) { }
   
   ngOnInit(): void {
   }
@@ -26,6 +35,19 @@ export class LoginComponent implements OnInit {
       this.myForm.markAllAsTouched();
       return;
     }    
+
+    this.reactiveMenu = [
+      {title: 'Calificaciones', route: './aprendizaje/calificaciones'},
+      {title: 'Resultados', route: './aprendizaje/resultados'},
+      {title: 'Criterios de evaluación', route: './aprendizaje/criterios'},
+      {title: 'Cerrar sesión', route: './aprendizaje/salir'},
+    ];
+
+    this.reactiveMenu.forEach(menuItem => {
+      this.appSharedService.actualizarInformacion(menuItem);
+    });
+    //this.appSharedService.actualizarInformacion(this.reactiveMenu[0]);
+
     sessionStorage.setItem('logged', '1');
     this.router.navigate(['./aprendizaje']);
   }
