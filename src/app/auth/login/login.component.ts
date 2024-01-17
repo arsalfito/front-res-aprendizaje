@@ -5,6 +5,7 @@ import { LoginDTO, MenuDTO, MenuItem, ResponseDetailLoginDTO } from 'src/app/mod
 import { AppSharedService } from 'src/app/services/app-shared-service';
 import { UsuariosServiceService } from 'src/app/services/usuarios-service.service';
 
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -45,6 +46,7 @@ export class LoginComponent implements OnInit {
       next:(detalleLogin: ResponseDetailLoginDTO)=>{
         if(detalleLogin!=null){
           //console.log(detalleLogin);
+          sessionStorage.setItem('usuario', JSON.stringify(detalleLogin));
           this.reactiveMenu = detalleLogin.menu;          
           this.reactiveMenu.forEach(menuItem => {
             this.appSharedService.actualizarInformacion(menuItem);
