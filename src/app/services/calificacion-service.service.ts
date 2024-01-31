@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
-import { AsignaturaDTO, CriteriosEvaluacionAsignaturaDTO, CriteriosEvaluacionDTO, EstudianteGrupoDTO, GrupoDTO, ProgramaDTO, ResponseDTO, ResultadoAprendizajeDTO } from '../model/model-interface';
+import { AsignaturaDTO, CriteriosEvaluacionAsignaturaDTO, CriteriosEvaluacionDTO, 
+  EstudianteGrupoDTO, GrupoDTO, ProgramaDTO, ResponseDTO, ResultadoAprendizajeDTO } from '../model/model-interface';
 
 @Injectable({
   providedIn: 'root'
@@ -62,4 +63,12 @@ export class CalificacionServiceService {
     return this.http.post<ResponseDTO>(url, estudiantes);
   }
 
+  cerrarGrupo(idGrupo: number, idAsignatura: number): Observable<ResponseDTO>{    
+    const url: string = `${ this.baseUrl }/cerrar-grupo?idGrupo=${idGrupo}&idAsignatura=${idAsignatura}`;
+    const body = {
+      idGrupo: idGrupo,
+      idAsignatura: idAsignatura,
+    };
+    return this.http.post<ResponseDTO>(url, body);
+  }
 }

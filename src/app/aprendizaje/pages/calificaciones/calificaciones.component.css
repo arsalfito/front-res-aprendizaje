@@ -1,0 +1,5 @@
+.btn-custom {
+    background-color: hsl(103, 100%, 60%); /* Cambia el color de fondo */
+    color: hwb(236 9% 7%); /* Cambia el color del texto*/
+    /* Otros estilos personalizados si es necesario */
+}

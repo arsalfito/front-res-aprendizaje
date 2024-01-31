@@ -194,11 +194,40 @@ export class CalificacionesComponent implements OnInit {
     })
   }
 
+  cerrarGrupo(){
+    let idGrupo: number = this.myForm.get('grupo')?.value;
+    let idAsignatura: number = this.myForm.get('asignatura')?.value;
+    this.calificacionServiceService.cerrarGrupo(idGrupo, idAsignatura)
+      .subscribe({
+        next:(resp=>{
+          if(resp.success){
+            this.limpiarFormulario();    
+            this.mensaje = resp.message;            
+          }else
+            this.error = resp.message;
+          console.log(resp.message);
+        }), error:(error: any)=>{          
+          this.error = error.error.message; 
+          //console.log(error.error);
+        }
+      })
+  }
+
   limpiarVariables(){
     this.error = '';
     this.mensaje = '';
     this.estudiantes = [];
     this.estudiantesCalificaciones.clear();
+  }
+
+  limpiarFormulario(){
+    this.myForm.get('programa')!.setValue('');
+    this.myForm.get('resultado')!.setValue('');
+    this.myForm.get('asignatura')!.setValue('');
+    this.myForm.get('criterio')!.setValue('');
+    this.myForm.get('grupo')!.setValue('');
+    this.estudiantes = [];
+    this.estudiantesCalificaciones.clear();    
   }
 
 }
