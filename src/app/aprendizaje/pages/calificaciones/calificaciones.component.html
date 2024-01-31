@@ -1,4 +1,125 @@
 <span *ngIf="logged != '1'" class="text-danger">Error el usuario no está autenticado.</span>
-<div *ngIf="logged === '1'" class="row">
-  <p>calificaciones works!</p>
+<div *ngIf="logged === '1'">
+  <div class="row">
+    <form [formGroup]="myForm">
+      <!--Programas-->
+      <div class="row mb-3">
+        <div class="col">
+          <label class="form-labes">Programa:</label>
+          <select formControlName="programa" class="form-control">
+            <option value="">--Seleccione el programa--</option>
+            <option *ngFor="let programa of programas" [value]="programa.id">{{programa.nombre}}</option>
+          </select>
+        </div>
+      </div>
+      <!--Criterios-->
+      <div class="row mb-3" *ngIf="resultados.length > 0">
+        <div class="col">
+          <label class="form-labes">Resultado de aprendizaje:</label>
+          <select formControlName="resultado" class="form-control">
+            <option value="">--Seleccione el resultado--</option>
+            <option *ngFor="let resultado of resultados" [value]="resultado.id">{{resultado.resultado}}</option>
+          </select>
+        </div>
+      </div>
+      <!--Asignaturas col-12 col-md-6-->
+      <div class="row mb-3" *ngIf="asignaturasProfesor.length > 0 && resultadoSelected > 0">
+        <div class="col">
+          <label class="form-labes">Asignatura:</label>
+          <select formControlName="asignatura" class="form-control">
+            <option value="">--Seleccione la asignatura--</option>
+            <option *ngFor="let asignatura of asignaturasProfesor" [value]="asignatura.id">{{asignatura.nombre}}</option>
+          </select>
+        </div>
+      </div>
+      <!--Criterios deevaluacion-->
+      <div class="row mb-3" *ngIf="criterios.length > 0">
+        <div class="col">
+          <label class="form-labes">Criterio de eveluación:</label>
+          <select formControlName="criterio" class="form-control">
+            <option value="">--Seleccione el criterio--</option>
+            <option *ngFor="let criterio of criterios" [value]="criterio.id">{{criterio.criterio}}</option>
+          </select>
+        </div>
+      </div>
+      <!--Grupo-->
+      <div class="row mb-3" *ngIf="grupos.length > 0 && criterioSelected > 0">
+        <div class="col">
+          <label class="form-labes">Grupo:</label>
+          <select formControlName="grupo" class="form-control">
+            <option value="">--Seleccione el grupo--</option>
+            <option *ngFor="let grupo of grupos" [value]="grupo.id">{{grupo.codigo}}</option>
+          </select>
+        </div>
+      </div>
+      <!--Boton cargar grupo-->
+      <div class="row mb-3" *ngIf="myForm.valid || estudiantes.length > 0">
+        <div class="col" style="text-align: center;">
+          <button class="btn btn-primary" (click)="cargarEstudiantes()">Cargar Estadudiantes</button>
+        </div>
+      </div>
+      <!--Estudiantes-->
+      <div class="row mb-3" *ngIf="estudiantes.length > 0">
+        <div class="col mx-auto text-center">
+          <table>
+            <thead>
+              <tr>
+                <th>Código</th>
+                <th>Nombre</th>
+                <th>Calificación</th>
+              </tr>
+            </thead>
+            <tbody formArrayName="estudiantesCalificaciones">
+              <tr *ngFor="let control of estudiantesCalificaciones.controls; let i = index" [formGroupName]="i">
+                <td>                  
+                  <input formControlName="codigo" placeholder="Nombre" readonly>
+                </td>
+                <td>                  
+                  <input formControlName="nombre" placeholder="Nombre" readonly>
+                </td>
+                <td>
+                  <input formControlName="calificacion" type="number" placeholder="Calificación">
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!--Boton guardar notas-->
+      <div class="row mb-3" *ngIf="myForm.valid && estudiantes.length > 0">
+        <div class="col" style="text-align: center;">
+          <button class="btn btn-primary" (click)="registrarCalificaciones()">Registrar calificacioones</button>
+        </div>
+        <div class="col" style="text-align: center;">
+          <button class="btn btn-custom" (click)="cerrarGrupo()">Cerrar grupo</button>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="error.length > 0">
+        <div class="col">
+          <span class="text-danger">{{error}}</span>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="mensaje.length > 0">
+        <div class="col">
+          <span class="text-info">{{mensaje}}</span>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          {{myForm.valid}}   
+          <code>
+            {{myForm.get('programa')?.errors}}
+            {{myForm.get('resultado')?.errors}}
+            {{myForm.get('asignatura')?.errors}}
+            {{myForm.get('criterio')?.errors}}
+            {{myForm.get('grupo')?.errors}}
+            {{myForm.get('estudiantesCalificaciones')?.errors}}
+
+            {{myForm.value | json}}
+
+        </code>       
+        </div>
+      </div>      
+    </form>
+  </div>
 </div>
